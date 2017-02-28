@@ -16,7 +16,7 @@ public class Client {
         try{
             
             map = NodeMap.buildFromFile(filename);
-            map.printStats("statistics.txt");
+            map.printStats("../../statistics.txt");
             
         }catch(Exception e){
         

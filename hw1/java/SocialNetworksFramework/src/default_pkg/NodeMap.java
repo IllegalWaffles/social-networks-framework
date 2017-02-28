@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.math.BigInteger;
 
 /**
  *
@@ -48,10 +47,10 @@ public class NodeMap extends HashMap<Integer, Node>{
             degreeArray[n.connections().size()]++;
         
         BufferedWriter out = new BufferedWriter(new PrintWriter(new File(filename)));
-        out.write(String.format("%-6s %-4s\n", "Degree", "Freq"));
+        out.write(String.format("%-6s, %-4s,\n", "Degree", "Freq"));
         
         for(int i = 1; i < degreeArray.length; i++)
-            out.write(String.format("%-6d %-4d\n", i, degreeArray[i]));
+            out.write(String.format("%d, %d,\n", i, degreeArray[i]));
         
         out.close();
         
@@ -98,6 +97,22 @@ public class NodeMap extends HashMap<Integer, Node>{
     
     }
     
+    private double nChoose3(int n){
+    
+        double temp = n;
+        for(int i = 1; i < 3; i++)
+            temp *= n-i;
+    
+        return temp/(double)6;
+        
+    }
+    
+    public double clusteringCoefficient(int numNodes, double numTriangles){
+    
+        return numTriangles/nChoose3(numNodes);
+    
+    }
+    
     public void printStats(String filename) throws Exception{
     
         BufferedWriter out = new BufferedWriter(new PrintWriter(new File(filename)));
@@ -106,7 +121,7 @@ public class NodeMap extends HashMap<Integer, Node>{
         
         try{
             System.err.println("Printing degree distribution...");
-            printDegreeDistribution(filename.substring(0, filename.indexOf(".txt")) + "-DD.txt");
+            printDegreeDistribution(filename.substring(0, filename.indexOf(".txt")) + "-DD.csv");
             System.err.println("Done!");
         }catch(Exception e){
         
@@ -115,40 +130,22 @@ public class NodeMap extends HashMap<Integer, Node>{
         }
         
         System.err.println("Counting triangles... (this may take a long time)");
-        //numTriangles = countTriangles();
+        numTriangles = countTriangles();
         System.err.println("Done!");
         
         System.err.println("Printing the rest of the stuff...");
         out.write("STATISTICS FOR GRAPH\n");
         out.write("Number of unique nodes: " + this.size());
         out.write("\nNumber of edges: " + this.edgecount);
-        //out.write("\nNumber of triangles counted: " + numTriangles);
-        out.write("\n3209! = " + factorial(3209));
+        out.write("\nNumber of triangles counted: " + numTriangles);
+        out.write(String.format("\nClustering coefficient: %f", clusteringCoefficient(this.values().size(), numTriangles)));
         out.close();
         
         System.err.println("Done!\nExiting...");
         
     }
     
-    private BigInteger recfact(long start, long n) 
-    {
-
-        long i;
-
-        if (n <= 16) { 
-            BigInteger r = new BigInteger(Long.toString(start));
-            for (i = start + 1; i < start + n; i++) 
-                r = r.multiply(new BigInteger(Long.toString(i)));
-            return r;
-        }
-
-        i = n / 2;
-
-        return recfact(start, i).multiply(recfact(start + i, n - i));
-
-    }
-
-    public BigInteger factorial(long n) { return recfact(1, n); }
+    
     
     public static NodeMap buildFromFile(String filename) throws IOException{
     
