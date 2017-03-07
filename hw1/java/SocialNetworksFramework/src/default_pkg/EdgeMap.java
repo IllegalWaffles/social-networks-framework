@@ -7,8 +7,9 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 
 /**
- *
  * @author Kuba Gasiorowski
+ * ID: 109776237
+ * NetID : kgasiorowski
  */
 public class EdgeMap extends HashMap<String, Edge>{
     

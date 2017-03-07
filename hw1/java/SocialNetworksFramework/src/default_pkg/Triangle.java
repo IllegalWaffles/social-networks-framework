@@ -1,8 +1,9 @@
 package default_pkg;
 
 /**
- *
- * @author Kuba
+ * @author Kuba Gasiorowski
+ * ID: 109776237
+ * NetID : kgasiorowski
  */
 public class Triangle {
 

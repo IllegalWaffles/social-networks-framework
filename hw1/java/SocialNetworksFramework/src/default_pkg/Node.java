@@ -1,16 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package default_pkg;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- *
- * @author Kuba
+ * @author Kuba Gasiorowski
+ * ID: 109776237
+ * NetID : kgasiorowski
  */
 public class Node{
     
