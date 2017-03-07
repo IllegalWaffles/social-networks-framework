@@ -6,6 +6,7 @@
 package default_pkg;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -39,6 +40,29 @@ public class Node{
         
         return true;
         
+    }
+    
+    public static int intersection(Node n1, Node n2){
+    
+        HashSet<Integer> set = new HashSet<>();
+        
+        for(int i : n1.connections())
+            if(n2.connections().contains(i))
+                set.add(i);
+                
+        return set.size();
+        
+    }
+    
+    public static int union(Node n1, Node n2){
+    
+        HashSet<Integer> set = new HashSet<>(); 
+    
+        set.addAll(n1.connections());
+        set.addAll(n2.connections());
+        
+        return set.size();
+    
     }
     
     public void setID(int ID) {
