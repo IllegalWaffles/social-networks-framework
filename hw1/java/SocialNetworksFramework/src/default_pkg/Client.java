@@ -1,10 +1,9 @@
 package default_pkg;
 
-import java.io.IOException;
-
 /**
- *
- * @author Kuba
+ * @author Kuba Gasiorowski
+ * ID: 109776237
+ * NetID : kgasiorowski
  */
 public class Client {
     
@@ -20,7 +19,7 @@ public class Client {
             nodemap.printStats("../../statistics.txt");
             
             edgemap = EdgeMap.buildEdgeMap(nodemap);
-            edgemap.printNeighborhoodOverlap("../../statistics-NO.txt", nodemap);
+            edgemap.printNeighborhoodOverlap("../../statistics-neighborhood_overlap.txt", nodemap);
             
         }catch(Exception e){
         

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package default_pkg;
 
 import java.io.BufferedWriter;
@@ -13,8 +8,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- *
- * @author Kuba
+ * @author Kuba Gasiorowski
+ * ID: 109776237
+ * NetID : kgasiorowski
  */
 public class NodeMap extends HashMap<Integer, Node>{
     
@@ -36,6 +32,7 @@ public class NodeMap extends HashMap<Integer, Node>{
     public void printDegreeDistribution(String filename) throws IOException{
         
         HashMap<Integer, Integer> distributionMap = new HashMap<Integer, Integer>();
+        boolean omitZeros = true;
         
         int highest_degree = -1;
         for(Node n : this.values())
@@ -50,7 +47,8 @@ public class NodeMap extends HashMap<Integer, Node>{
         out.write(String.format("%-6s, %-4s,\n", "Degree", "Freq"));
         
         for(int i = 1; i < degreeArray.length; i++)
-            out.write(String.format("%d, %d,\n", i, degreeArray[i]));
+            if(!(degreeArray[i] == 0 && omitZeros))
+                out.write(String.format("%d, %d,\n", i, degreeArray[i]));
         
         out.close();
         
@@ -121,7 +119,7 @@ public class NodeMap extends HashMap<Integer, Node>{
         
         try{
             System.err.println("Printing degree distribution...");
-            printDegreeDistribution(filename.substring(0, filename.indexOf(".txt")) + "-DD.csv");
+            printDegreeDistribution(filename.substring(0, filename.indexOf(".txt")) + "-degree_distribution.csv");
             System.err.println("Done!");
         }catch(Exception e){
         
