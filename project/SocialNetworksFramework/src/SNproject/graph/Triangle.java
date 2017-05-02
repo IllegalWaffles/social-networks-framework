@@ -1,4 +1,4 @@
-package default_pkg;
+package SNproject.graph;
 
 /**
  * @author Kuba Gasiorowski

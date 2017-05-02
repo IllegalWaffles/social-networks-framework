@@ -1,4 +1,4 @@
-package default_pkg;
+package SNproject.graph;
 
 /**
  * @author Kuba Gasiorowski
@@ -6,6 +6,8 @@ package default_pkg;
  * NetID : kgasiorowski
  */
 public class Client {
+    
+    /*
     
     public static void main(String args[]){
     
@@ -29,4 +31,6 @@ public class Client {
         
     }
     
+    */
+
 }

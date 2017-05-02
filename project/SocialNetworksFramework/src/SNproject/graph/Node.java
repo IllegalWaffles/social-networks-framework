@@ -1,4 +1,4 @@
-package default_pkg;
+package SNproject.graph;
 
 import java.util.ArrayList;
 import java.util.HashSet;
