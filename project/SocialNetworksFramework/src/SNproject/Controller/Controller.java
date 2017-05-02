@@ -5,6 +5,7 @@
  */
 package SNproject.Controller;
 
+import SNproject.AppComponent;
 import SNproject.FileChooserSingleton.FileChooserSingleton;
 import SNproject.SNApp;
 import java.io.File;
@@ -15,17 +16,17 @@ import javafx.stage.FileChooser;
  *
  * @author Kuba
  */
-public class Controller {
-    
-    SNApp app;
+public class Controller extends AppComponent{
     
     public Controller(SNApp app){
         
-        this.app = app;
+        super(app);
         
     }
     
     public void handleExitButton(){
+        
+        System.out.println("Handle event for exit button");
         
         app.getMainStage().close();
         exit(0);
@@ -34,11 +35,13 @@ public class Controller {
     
     public void handleStartButton(){
         
-        
+        System.out.println("Handle event for start button event");
         
     }
     
     public void handleFileChooseButton(){
+        
+        System.out.println("Handle event for file choose button");
         
         FileChooser fc = FileChooserSingleton.getSingleton();
         

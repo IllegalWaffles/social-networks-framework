@@ -14,7 +14,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
  */
 public class FileChooserSingleton {
     
-    private static final String DEFAULT_CHOOSER_TITLE = "";
+    private static final String DEFAULT_CHOOSER_TITLE = "Choose A File";
     private static FileChooser chooser;
     
     public static FileChooser getSingleton(String title){
@@ -30,10 +30,7 @@ public class FileChooserSingleton {
     
     public static FileChooser getSingleton(){
         
-        if(chooser == null)
-            initSingleton();
-        
-        return chooser;
+        return getSingleton(DEFAULT_CHOOSER_TITLE);
         
     }
     

@@ -9,11 +9,15 @@ package SNproject;
 
 import SNproject.Controller.Controller;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -25,7 +29,9 @@ public class SNApp extends Application{
     private static final String APP_TITLE = "Kuba Gasiorowski CSE392";
     private static final String EXIT_TEXT = "Exit";
     private static final String START_TEXT = "Start";
-    private static final String CHOOSER_TEXT = "Choose file";
+    private static final String CHOOSER_TEXT = "Choose graph data";
+    private static final String PROGERSS_LABEL = "Default progress message";
+    private static final String TEXT_AREA_DEFAULT_TEXT = "Text area text";
     
     private static final int APP_WIDTH = 500;
     private static final int APP_HEIGHT = 300;
@@ -38,6 +44,11 @@ public class SNApp extends Application{
     private Button exitButton;
     private Button startButton;
     private Button chooseButton;
+    
+    private TextArea outputArea;
+    
+    private Label progressLabel;
+    private ProgressBar progressBar;
     
     @Override
     public void start(Stage mainStage){
@@ -57,9 +68,28 @@ public class SNApp extends Application{
         startButton = new Button(START_TEXT);
         chooseButton = new Button(CHOOSER_TEXT);
         
-        mainPane = new VBox();
+        progressLabel = new Label("Progress: 0%");
         
-        mainPane.getChildren().addAll(exitButton, startButton, chooseButton);
+        progressBar = new ProgressBar(0.0);
+        progressBar.setPrefWidth(200);
+        
+        outputArea = new TextArea();
+        
+        mainPane = new HBox();
+        
+        VBox firstColumn = new VBox(5);
+        VBox secondColumn = new VBox(5);
+        VBox thirdColumn = new VBox();
+        
+        firstColumn.setPadding(new Insets(10));
+        secondColumn.setPadding(new Insets(10));
+        
+        
+        firstColumn.getChildren().addAll(exitButton, chooseButton, startButton);
+        secondColumn.getChildren().addAll(progressLabel, progressBar);
+        
+        
+        mainPane.getChildren().addAll(firstColumn, secondColumn);
         
         mainScene = new Scene(mainPane);
         mainStage.setScene(mainScene);
@@ -94,9 +124,48 @@ public class SNApp extends Application{
         
     }
     
+    public void disableStart(boolean val){
+        
+        startButton.setDisable(val);
+        
+    }
+    
+    public void disableChoose(boolean val){
+        
+        chooseButton.setDisable(val);
+        
+    }
+    
+    public void disableButtons(){
+        
+        disableStart(true);
+        disableChoose(true);
+        
+    }
+    
+    public void enableButtons(){
+        
+        disableStart(false);
+        disableChoose(false);
+        
+    }
+    
     public Stage getMainStage(){
         
         return mainStage;
+        
+    }
+    
+    public synchronized void setProgress(double d){
+        
+        setProgress(d, "Progress : " + (int)(d*100) + "%");
+        
+    }
+    
+    public synchronized void setProgress(double d, String s){
+        
+        progressLabel.setText(s);
+        progressBar.setProgress(d);
         
     }
     
