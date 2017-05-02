@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SNproject.File;
 
 import SNproject.AppComponent;
 import SNproject.SNApp;
+import java.io.File;
 
 /**
  *
@@ -14,10 +10,28 @@ import SNproject.SNApp;
  */
 public class FileManager extends AppComponent {
     
-    public FileManager(SNApp init){
-        
-        super(init);
+    private File graphData;
+    
+    /**
+     * Sets the source graph file
+     * @param graphData 
+     */
+    public void setGraphFile(File graphData){
+       
+        this.graphData = graphData;
         
     }
+    
+    /**
+     * Returns the source graph file
+     * @return 
+     */
+    public File getGraphFile(){return graphData;}
+    
+    /**
+     * Initializes the file component of this application
+     * @param init 
+     */
+    public FileManager(SNApp init){super(init);}
     
 }

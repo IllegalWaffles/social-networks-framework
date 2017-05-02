@@ -18,12 +18,19 @@ import javafx.stage.FileChooser;
  */
 public class Controller extends AppComponent{
     
+    /**
+     * Initializes this controller
+     * @param app 
+     */
     public Controller(SNApp app){
         
         super(app);
         
     }
     
+    /**
+     * Handles when the use clicks the exit button
+     */
     public void handleExitButton(){
         
         System.out.println("Handle event for exit button");
@@ -33,12 +40,18 @@ public class Controller extends AppComponent{
         
     }
     
+    /**
+     * Handles when the user clicks the start button
+     */
     public void handleStartButton(){
         
         System.out.println("Handle event for start button event");
         
     }
     
+    /**
+     * Handles when the user clicks the choose button
+     */
     public void handleFileChooseButton(){
         
         System.out.println("Handle event for file choose button");
@@ -54,6 +67,8 @@ public class Controller extends AppComponent{
             filename = chosenFile.getName();
         
         System.out.printf("File choosen: %s\n", filename);
+        
+        
         
     }
     

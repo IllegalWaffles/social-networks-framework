@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SNproject.FileChooserSingleton;
 
 import javafx.stage.FileChooser;
@@ -17,6 +12,11 @@ public class FileChooserSingleton {
     private static final String DEFAULT_CHOOSER_TITLE = "Choose A File";
     private static FileChooser chooser;
     
+    /**
+     * Returns the singleton with a specific title set
+     * @param title
+     * @return 
+     */
     public static FileChooser getSingleton(String title){
         
         if(chooser == null)
@@ -28,14 +28,24 @@ public class FileChooserSingleton {
         
     }
     
+    /**
+     * Returns the singleton with the default title
+     * @return 
+     */
     public static FileChooser getSingleton(){
         
         return getSingleton(DEFAULT_CHOOSER_TITLE);
         
     }
     
+    /**
+     * Private default constructor, so that it may not be ordinarily used.
+     */
     private FileChooserSingleton(){}
     
+    /**
+     * Initializes the singleton. Only called once
+     */
     private static void initSingleton(){
         
         chooser = new FileChooser();

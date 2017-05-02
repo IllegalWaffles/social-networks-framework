@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SNproject.Data;
 
 import SNproject.AppComponent;
@@ -14,6 +9,10 @@ import SNproject.SNApp;
  */
 public class DataManager extends AppComponent{
     
+    /**
+     * Initializes the data component of this application
+     * @param init 
+     */
     public DataManager(SNApp init){
         
         super(init);

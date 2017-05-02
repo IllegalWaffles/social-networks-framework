@@ -1,13 +1,8 @@
 package SNproject;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import SNproject.Controller.Controller;
+import SNproject.Data.DataManager;
+import SNproject.File.FileManager;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -50,19 +45,26 @@ public class SNApp extends Application{
     private Label progressLabel;
     private ProgressBar progressBar;
     
+    private DataManager dataManager;
+    private FileManager fileManager;
+    
     @Override
     public void start(Stage mainStage){
         
         this.mainStage = mainStage;
         
-        initComponents();
+        initGUI();
         initHandlers();
+        initComponents();
         
         mainStage.show();
         
     }
     
-    private void initComponents(){
+    /**
+     * Initializes the GUI
+     */
+    private void initGUI(){
         
         exitButton = new Button(EXIT_TEXT);
         startButton = new Button(START_TEXT);
@@ -74,20 +76,19 @@ public class SNApp extends Application{
         progressBar.setPrefWidth(200);
         
         outputArea = new TextArea();
+        outputArea.setEditable(false);
+        outputArea.setPrefWidth(100);
         
         mainPane = new HBox();
         
         VBox firstColumn = new VBox(5);
         VBox secondColumn = new VBox(5);
-        VBox thirdColumn = new VBox();
         
         firstColumn.setPadding(new Insets(10));
         secondColumn.setPadding(new Insets(10));
         
-        
         firstColumn.getChildren().addAll(exitButton, chooseButton, startButton);
-        secondColumn.getChildren().addAll(progressLabel, progressBar);
-        
+        secondColumn.getChildren().addAll(progressLabel, progressBar, outputArea);
         
         mainPane.getChildren().addAll(firstColumn, secondColumn);
         
@@ -100,6 +101,9 @@ public class SNApp extends Application{
         
     }
     
+    /**
+     * Initializes handlers for all our buttons
+     */
     private void initHandlers(){
         
         Controller controller = new Controller(this);
@@ -124,44 +128,31 @@ public class SNApp extends Application{
         
     }
     
-    public void disableStart(boolean val){
-        
-        startButton.setDisable(val);
-        
+    /**
+     * Initializes the application's components
+     */
+    private void initComponents(){
+    
+        dataManager = new DataManager(this);
+        fileManager = new FileManager(this);
+    
     }
     
-    public void disableChoose(boolean val){
-        
-        chooseButton.setDisable(val);
-        
-    }
-    
-    public void disableButtons(){
-        
-        disableStart(true);
-        disableChoose(true);
-        
-    }
-    
-    public void enableButtons(){
-        
-        disableStart(false);
-        disableChoose(false);
-        
-    }
-    
-    public Stage getMainStage(){
-        
-        return mainStage;
-        
-    }
-    
+    /**
+     * Sets the application's progress level
+     * @param d 
+     */
     public synchronized void setProgress(double d){
         
         setProgress(d, "Progress : " + (int)(d*100) + "%");
         
     }
     
+    /**
+     * Sets the application's progress level with a specific message
+     * @param d
+     * @param s 
+     */
     public synchronized void setProgress(double d, String s){
         
         progressLabel.setText(s);
@@ -169,6 +160,68 @@ public class SNApp extends Application{
         
     }
     
+    /**
+     * Disables the start button
+     * @param val 
+     */
+    public void disableStart(boolean val){
+        
+        startButton.setDisable(val);
+        
+    }
+    
+    /**
+     * Disables the choose file button
+     * @param val 
+     */
+    public void disableChoose(boolean val){
+        
+        chooseButton.setDisable(val);
+        
+    }
+    
+    /**
+     * Disables all relevant buttons
+     */
+    public void disableButtons(){
+        
+        disableStart(true);
+        disableChoose(true);
+        
+    }
+    
+    /**
+     * Enables all relevant buttons
+     */
+    public void enableButtons(){
+        
+        disableStart(false);
+        disableChoose(false);
+        
+    }
+    
+    /**
+     * Returns the main stage (gui)
+     * @return 
+     */
+    public Stage getMainStage(){return mainStage;}
+    
+    /**
+     * Returns the file component of this application
+     * @return 
+     */
+    public FileManager getFileManager(){return fileManager;}
+    
+    /**
+     * Returns the data component of this application
+     * @return 
+     */
+    public DataManager getDataManager(){return dataManager;}
+    
+    /**
+     * Launches the gui
+     * @param args 
+     */
     public static void main(String args[]){
         
         launch(args);
