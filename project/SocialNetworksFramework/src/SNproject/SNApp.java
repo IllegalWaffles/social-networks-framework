@@ -3,6 +3,7 @@ package SNproject;
 import SNproject.Controller.Controller;
 import SNproject.Data.DataManager;
 import SNproject.File.FileManager;
+import java.io.File;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -23,13 +25,22 @@ public class SNApp extends Application{
     
     private static final String APP_TITLE = "Kuba Gasiorowski CSE392";
     private static final String EXIT_TEXT = "Exit";
-    private static final String START_TEXT = "Start";
+    private static final String START_TEXT = "Start Calculations";
     private static final String CHOOSER_TEXT = "Choose graph data";
-    private static final String PROGERSS_LABEL = "Default progress message";
-    private static final String TEXT_AREA_DEFAULT_TEXT = "Text area text";
+    private static final String PROGRESS_LABEL = "Default progress message";
+    private static final String TEXT_AREA_DEFAULT = "Welcome\n";
+    private static final String DEFAULT_CHOSEN_FILE_TEXT = "No file chosen";
     
-    private static final int APP_WIDTH = 500;
-    private static final int APP_HEIGHT = 300;
+    private static final int APP_WIDTH = 700;
+    private static final int APP_HEIGHT = 500;
+    
+    private static final int PROGRESS_BAR_WIDTH = 300;
+    
+    private static final int TEXT_AREA_WIDTH = PROGRESS_BAR_WIDTH;
+    private static final int TEXT_AREA_HEIGHT = 375;
+    
+    private static final int FIRST_COLUMN_WIDTH = 300;
+    private static final int SECOND_COLUMN_WIDTH = 0;
     
     private Stage mainStage;
     
@@ -38,7 +49,9 @@ public class SNApp extends Application{
     
     private Button exitButton;
     private Button startButton;
+    
     private Button chooseButton;
+    private TextField fileChosenField;
     
     private TextArea outputArea;
     
@@ -68,16 +81,24 @@ public class SNApp extends Application{
         
         exitButton = new Button(EXIT_TEXT);
         startButton = new Button(START_TEXT);
+        
+        HBox chooseBox = new HBox(10);
+        
         chooseButton = new Button(CHOOSER_TEXT);
+        fileChosenField = new TextField(DEFAULT_CHOSEN_FILE_TEXT);
+        fileChosenField.setEditable(false);
+        
+        chooseBox.getChildren().addAll(chooseButton, fileChosenField);
         
         progressLabel = new Label("Progress: 0%");
         
         progressBar = new ProgressBar(0.0);
-        progressBar.setPrefWidth(200);
+        progressBar.setPrefWidth(PROGRESS_BAR_WIDTH);
         
-        outputArea = new TextArea();
+        outputArea = new TextArea(TEXT_AREA_DEFAULT);
         outputArea.setEditable(false);
-        outputArea.setPrefWidth(100);
+        outputArea.setPrefWidth(TEXT_AREA_WIDTH);
+        outputArea.setPrefHeight(TEXT_AREA_HEIGHT);
         
         mainPane = new HBox();
         
@@ -85,9 +106,11 @@ public class SNApp extends Application{
         VBox secondColumn = new VBox(5);
         
         firstColumn.setPadding(new Insets(10));
+        firstColumn.setPrefWidth(FIRST_COLUMN_WIDTH);
+        
         secondColumn.setPadding(new Insets(10));
         
-        firstColumn.getChildren().addAll(exitButton, chooseButton, startButton);
+        firstColumn.getChildren().addAll(exitButton, chooseBox, startButton);
         secondColumn.getChildren().addAll(progressLabel, progressBar, outputArea);
         
         mainPane.getChildren().addAll(firstColumn, secondColumn);
@@ -136,6 +159,39 @@ public class SNApp extends Application{
         dataManager = new DataManager(this);
         fileManager = new FileManager(this);
     
+    }
+    
+    /**
+     * 
+     * @param s 
+     */
+    public void appendTextArea(String s){
+        
+        outputArea.appendText(s);
+        
+    }
+    
+    /**
+     * 
+     * @param s 
+     */
+    public void appendTextAreanl(String s){
+        
+        appendTextArea(s + "\n");
+        
+    }
+    
+    /**
+     * 
+     * @param f 
+     */
+    public void setChosenFile(File f){
+        
+        if(f == null)
+            fileChosenField.setText(DEFAULT_CHOSEN_FILE_TEXT);
+        else
+            fileChosenField.setText(f.getName());
+        
     }
     
     /**

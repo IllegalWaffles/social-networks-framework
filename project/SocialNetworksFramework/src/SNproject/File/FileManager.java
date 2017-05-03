@@ -16,11 +16,7 @@ public class FileManager extends AppComponent {
      * Sets the source graph file
      * @param graphData 
      */
-    public void setGraphFile(File graphData){
-       
-        this.graphData = graphData;
-        
-    }
+    public void setGraphFile(File graphData){this.graphData = graphData;}
     
     /**
      * Returns the source graph file

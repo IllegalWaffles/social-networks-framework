@@ -45,7 +45,19 @@ public class Controller extends AppComponent{
      */
     public void handleStartButton(){
         
-        System.out.println("Handle event for start button event");
+        app.appendTextAreanl("-----------");
+        app.appendTextAreanl("Starting...");
+        
+        if(app.getFileManager().getGraphFile() == null){
+            
+            System.out.println("No input file initialized");
+            app.appendTextAreanl("Error: no input file initialized.\nPlease pick a file with a valid format");
+            
+        }else{
+            
+            
+            
+        }
         
     }
     
@@ -67,8 +79,11 @@ public class Controller extends AppComponent{
             filename = chosenFile.getName();
         
         System.out.printf("File choosen: %s\n", filename);
+        app.appendTextArea("File chosen: " + filename + "\n");
         
-        
+        app.getFileManager().setGraphFile(chosenFile);
+        app.getDataManager().initData();
+        app.setChosenFile(app.getFileManager().getGraphFile());
         
     }
     
