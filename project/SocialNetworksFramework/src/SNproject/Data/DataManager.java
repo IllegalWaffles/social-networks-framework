@@ -1,11 +1,13 @@
 package SNproject.Data;
 
 import SNproject.AppComponent;
+import SNproject.Graph.Graph;
 import SNproject.SNApp;
 import SNproject.graph.EdgeMap;
 import SNproject.graph.NodeMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,8 +15,12 @@ import java.io.IOException;
  */
 public class DataManager extends AppComponent{
     
-    NodeMap graphNodeMap;
-    EdgeMap graphEdgeMap;
+    private Graph graphToTest;
+    
+//    private NodeMap graphNodeMap;
+//    private EdgeMap graphEdgeMap;
+    
+    private ArrayList<Graph> randomGraphList;
     
     /**
      * Initializes the data component of this application
@@ -23,8 +29,10 @@ public class DataManager extends AppComponent{
     public DataManager(SNApp init){
         
         super(init);
+        graphToTest = new Graph();
         
     }
+    
     
     public void initData(){
         
@@ -41,12 +49,12 @@ public class DataManager extends AppComponent{
             
                 app.appendTextAreanl("Building node map from file " + graphFile.getAbsolutePath());
                 
-                graphNodeMap = NodeMap.buildFromFile(graphFile.getAbsolutePath());
+                graphToTest.setNodeMap(NodeMap.buildFromFile(graphFile.getAbsolutePath()));
                 
                 app.appendTextAreanl("Finished building node map");
                 app.appendTextAreanl("Building edge map from nodemap generated");
                 
-                graphEdgeMap = EdgeMap.buildEdgeMap(graphNodeMap);
+                graphToTest.setEdgeMap(EdgeMap.buildEdgeMap(graphToTest.getNodeMap()));
                 
                 app.appendTextAreanl("Finished building edge map");
                 app.appendTextAreanl("Finished initializing data");
@@ -68,6 +76,10 @@ public class DataManager extends AppComponent{
             }
             
         }
+        
+    }
+    
+    public void generateRandomGraphData(){
         
         
         

@@ -23,8 +23,7 @@ public class EdgeMap extends HashMap<String, Edge>{
             for(int c : n.connections()){
             
                 newedge = new Edge(n.getID(), c);
-                if(!edgemap.containsKey(newedge.getHashString()))
-                    edgemap.put(newedge.getHashString(), newedge);
+                edgemap.addEdge(newedge);
                     
             }
         
@@ -32,6 +31,16 @@ public class EdgeMap extends HashMap<String, Edge>{
         
         return edgemap;
     
+    }
+    
+    public boolean addEdge(Edge newedge){
+        
+        if(!this.containsKey(newedge.getHashString())){
+            this.put(newedge.getHashString(), newedge);
+            return true;
+        }else
+            return false;
+        
     }
     
     public void printNeighborhoodOverlap(String filename, NodeMap nodemap) throws IOException {

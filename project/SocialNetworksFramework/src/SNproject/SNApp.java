@@ -159,6 +159,9 @@ public class SNApp extends Application{
         dataManager = new DataManager(this);
         fileManager = new FileManager(this);
     
+        //Initialize random graphs here
+        
+        
     }
     
     /**

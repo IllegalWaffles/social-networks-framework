@@ -95,16 +95,6 @@ public class NodeMap extends HashMap<Integer, Node>{
     
     }
     
-    private double nChoose3(int n){
-    
-        double temp = n;
-        for(int i = 1; i < 3; i++)
-            temp *= n-i;
-    
-        return temp/(double)6;
-        
-    }
-    
     public double clusteringCoefficient(int numNodes, double numTriangles){
     
         return numTriangles/nChoose3(numNodes);
@@ -143,8 +133,6 @@ public class NodeMap extends HashMap<Integer, Node>{
         
     }
     
-    
-    
     public static NodeMap buildFromFile(String filename) throws IOException{
     
         NodeMap map = new NodeMap();
@@ -181,6 +169,16 @@ public class NodeMap extends HashMap<Integer, Node>{
         
         return map;
     
+    }
+    
+    public static double nChoose3(int n){
+    
+        double temp = n;
+        for(int i = 1; i < 3; i++)
+            temp *= n-i;
+    
+        return temp/(double)6;
+        
     }
     
 }
