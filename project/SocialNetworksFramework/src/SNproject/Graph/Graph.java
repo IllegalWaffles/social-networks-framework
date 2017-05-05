@@ -9,6 +9,7 @@ import SNproject.graph.EdgeMap;
 import SNproject.graph.NodeMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  *
@@ -46,11 +47,44 @@ public class Graph {
     public void setNodeMap(NodeMap nm){nodemap = nm;}
     public void setEdgeMap(EdgeMap em){edgemap = em;}
     
+    public int getNumNodes(){return nodemap.getNumNodes();}
+    
     public static Graph generateRandomGraph(GraphProperties parameters){
         
-        Graph toReturn = new Graph();
+        Random rand = new Random();
+        Graph graph = new Graph();
         
-        return toReturn;
+        if(parameters == null)
+            throw new IllegalArgumentException("Parameters was null");
+        
+        int numNodes =      parameters.getNumNodes();
+        double edgeProb =   parameters.getLinkProb();
+        
+        //Populate the node map
+        for(int i = 0; i < numNodes; i++){
+            
+            graph.getNodeMap().put(i, new Node(i));
+            
+        }
+        
+        for(int i = 0; i < numNodes; i++)
+            for(int j = 0; j < numNodes-i; j++){
+                
+                double roll = rand.nextInt(100)/100.0;
+                
+                if(roll <= edgeProb){
+                    
+                    //Add the edge
+                    graph.getNodeMap().addConnection(i, j);
+                    
+                }else{}
+                //Otherwise do nothing
+                
+            }
+        
+        graph.setEdgeMap(EdgeMap.buildEdgeMap(graph.getNodeMap()));
+        
+        return graph;
         
     }
     

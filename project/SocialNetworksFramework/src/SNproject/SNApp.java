@@ -5,6 +5,7 @@ import SNproject.Data.DataManager;
 import SNproject.File.FileManager;
 import java.io.File;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -30,6 +32,7 @@ public class SNApp extends Application{
     private static final String PROGRESS_LABEL = "Default progress message";
     private static final String TEXT_AREA_DEFAULT = "Welcome\n";
     private static final String DEFAULT_CHOSEN_FILE_TEXT = "No file chosen";
+    private static final String RANDOM_LABEL_TEXT = "Num random graphs:";
     
     private static final int APP_WIDTH = 700;
     private static final int APP_HEIGHT = 500;
@@ -42,6 +45,8 @@ public class SNApp extends Application{
     private static final int FIRST_COLUMN_WIDTH = 300;
     private static final int SECOND_COLUMN_WIDTH = 0;
     
+    private static final double LINK_PROB = .5;
+    
     private Stage mainStage;
     
     private Scene mainScene;
@@ -53,6 +58,9 @@ public class SNApp extends Application{
     private Button chooseButton;
     private TextField fileChosenField;
     
+    private Label labelNumGraphs;
+    private TextField numGraphsField;
+            
     private TextArea outputArea;
     
     private Label progressLabel;
@@ -90,7 +98,15 @@ public class SNApp extends Application{
         
         chooseBox.getChildren().addAll(chooseButton, fileChosenField);
         
-        progressLabel = new Label("Progress: 0%");
+        HBox numGraphsBox = new HBox(10);
+        
+        labelNumGraphs = new Label(RANDOM_LABEL_TEXT);
+        numGraphsField = new TextField();
+        numGraphsField.setPrefWidth(30);
+        
+        numGraphsBox.getChildren().addAll(labelNumGraphs, numGraphsField);
+        
+        progressLabel = new Label(PROGRESS_LABEL);
         
         progressBar = new ProgressBar(0.0);
         progressBar.setPrefWidth(PROGRESS_BAR_WIDTH);
@@ -110,7 +126,7 @@ public class SNApp extends Application{
         
         secondColumn.setPadding(new Insets(10));
         
-        firstColumn.getChildren().addAll(exitButton, chooseBox, startButton);
+        firstColumn.getChildren().addAll(exitButton, chooseBox, numGraphsBox, startButton);
         secondColumn.getChildren().addAll(progressLabel, progressBar, outputArea);
         
         mainPane.getChildren().addAll(firstColumn, secondColumn);
@@ -226,6 +242,12 @@ public class SNApp extends Application{
     public void disableStart(boolean val){
         
         startButton.setDisable(val);
+        
+    }
+    
+    public String getNumGraphsData(){
+        
+        return numGraphsField.getText();
         
     }
     

@@ -11,7 +11,23 @@ package SNproject.Graph;
  */
 public class GraphProperties{
     
-    public double link_prob;
-    public int num_nodes;
+    private double link_prob;
+    private int num_nodes;
+    
+    public void setLinkProb(double d){
+        link_prob = d;
+    }
+    
+    public void setNumNodes(int i){
+        num_nodes = i;
+    }
+    
+    public double getLinkProb(){
+        return link_prob;
+    }
+    
+    public int getNumNodes(){
+        return num_nodes;
+    }
     
 }

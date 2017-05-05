@@ -2,6 +2,7 @@ package SNproject.Data;
 
 import SNproject.AppComponent;
 import SNproject.Graph.Graph;
+import SNproject.Graph.GraphProperties;
 import SNproject.SNApp;
 import SNproject.graph.EdgeMap;
 import SNproject.graph.NodeMap;
@@ -79,9 +80,31 @@ public class DataManager extends AppComponent{
         
     }
     
-    public void generateRandomGraphData(){
+    public ArrayList<Graph> generateRandomGraphData() throws NumberFormatException {
         
+        int numGraphs = Integer.parseInt(app.getNumGraphsData());
         
+        if(numGraphs <= 0)
+            throw new NumberFormatException();
+        
+        ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
+        
+        GraphProperties props = new GraphProperties();
+        props.setNumNodes(graphToTest.getNodeMap().getNumNodes());
+        props.setLinkProb(.5);
+        
+        for(int i = 0; i < numGraphs; i++){
+            
+            app.appendTextArea("Generating graph " + i  + "...");
+            
+            Graph newRandGraph = Graph.generateRandomGraph(props);
+            randomGraphs.add(newRandGraph);
+            
+            app.appendTextAreanl(" DONE");
+            
+        }
+        
+        return randomGraphs;
         
     }
     

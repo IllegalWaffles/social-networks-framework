@@ -7,9 +7,11 @@ package SNproject.Controller;
 
 import SNproject.AppComponent;
 import SNproject.FileChooserSingleton.FileChooserSingleton;
+import SNproject.Graph.Graph;
 import SNproject.SNApp;
 import java.io.File;
 import static java.lang.System.exit;
+import java.util.ArrayList;
 import javafx.stage.FileChooser;
 
 /**
@@ -55,8 +57,18 @@ public class Controller extends AppComponent{
             
         }else{
             
+            app.appendTextAreanl("Generating random graphs...");
             
+            try{
             
+                ArrayList<Graph> randomGraphs = app.getDataManager().generateRandomGraphData();
+            
+            }catch(NumberFormatException nfe){
+                
+                System.out.println("Error: invalid number of graphs entered");
+                app.appendTextAreanl("Error: invalid number of graphs entered");
+                
+            }
         }
         
     }

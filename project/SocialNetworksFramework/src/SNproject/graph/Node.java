@@ -28,7 +28,7 @@ public class Node{
     
     public static boolean connect(Node node1, Node node2){
         
-        if(node1.connections().contains(node2.ID) || node2.connections().contains(node2.ID))
+        if(node1.connections().contains(node2.ID) || node2.connections().contains(node1.ID))
             return false;
             
         node1.connections().add(node2.ID);
@@ -36,6 +36,12 @@ public class Node{
         
         return true;
         
+    }
+    
+    public boolean connect(Node otherNode){
+        
+        return Node.connect(this, otherNode);
+            
     }
     
     public static int intersection(Node n1, Node n2){

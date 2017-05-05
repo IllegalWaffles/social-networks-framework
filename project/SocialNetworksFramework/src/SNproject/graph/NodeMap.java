@@ -16,18 +16,10 @@ public class NodeMap extends HashMap<Integer, Node>{
     
     private int edgecount;
 
-    public NodeMap() {
-        edgecount = 0;
-    }
-    
-    
-    public int getEdgecount(){
-        return edgecount;
-    }
-    
-    public void incEdgecount(){
-        edgecount++;
-    }
+    public NodeMap() {edgecount = 0;}
+    public int getEdgecount(){return edgecount;}
+    public void incEdgecount(){edgecount++;}
+    public int getNumNodes(){return this.size();}
     
     public void printDegreeDistribution(String filename) throws IOException{
         
@@ -54,7 +46,7 @@ public class NodeMap extends HashMap<Integer, Node>{
         
     }
     
-    public int countTriangles(){
+    private int countTriangles(){
     
         HashMap<String, Triangle> trianglesList = new HashMap<String, Triangle>();
         Triangle triangle;
@@ -178,6 +170,24 @@ public class NodeMap extends HashMap<Integer, Node>{
             temp *= n-i;
     
         return temp/(double)6;
+        
+    }
+    
+    public boolean addConnection(int ID1, int ID2){
+        
+        Node node1, node2;
+        
+        if(!containsKey(ID1) || !containsKey(ID2) || ID1 <= 0 || ID2 <= 0)
+            return false;
+        
+        node1 = get(ID1);
+        node2 = get(ID2);
+        
+        if(node1.connect(node2));
+            incEdgecount();
+        
+        return true;
+        
         
     }
     
