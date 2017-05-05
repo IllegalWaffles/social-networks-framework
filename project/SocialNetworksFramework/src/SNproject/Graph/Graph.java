@@ -6,7 +6,9 @@
 package SNproject.Graph;
 
 import SNproject.graph.EdgeMap;
+import SNproject.graph.Node;
 import SNproject.graph.NodeMap;
+import SNproject.Graph.GraphProperties;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -20,7 +22,12 @@ public class Graph {
     private NodeMap nodemap;
     private EdgeMap edgemap;
     
-    public Graph(){}
+    public Graph(){
+    
+        nodemap = new NodeMap();
+        edgemap = new EdgeMap();
+    
+    }
     
     public Graph(File f){
         
