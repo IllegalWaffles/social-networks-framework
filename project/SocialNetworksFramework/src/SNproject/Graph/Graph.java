@@ -8,7 +8,7 @@ package SNproject.Graph;
 import SNproject.graph.EdgeMap;
 import SNproject.graph.Node;
 import SNproject.graph.NodeMap;
-import SNproject.Graph.GraphProperties;
+import SNproject.SNApp;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
@@ -56,7 +56,7 @@ public class Graph {
     
     public int getNumNodes(){return nodemap.getNumNodes();}
     
-    public static Graph generateRandomGraph(GraphProperties parameters){
+    public static Graph generateRandomGraph(GraphProperties parameters, SNApp app){
         
         Random rand = new Random();
         Graph graph = new Graph();
@@ -67,6 +67,8 @@ public class Graph {
         int numNodes =      parameters.getNumNodes();
         double edgeProb =   parameters.getLinkProb();
         
+        app.appendTextAreanl("Populating node map...");
+        
         //Populate the node map
         for(int i = 0; i < numNodes; i++){
             
@@ -74,7 +76,11 @@ public class Graph {
             
         }
         
-        for(int i = 0; i < numNodes; i++)
+        app.appendTextAreanl("Finished populating node map");
+        app.appendTextAreanl("Creating random edges...");
+        
+        for(int i = 0; i < numNodes; i++){
+            
             for(int j = 0; j < numNodes-i; j++){
                 
                 double roll = rand.nextInt(100)/100.0;
@@ -84,12 +90,23 @@ public class Graph {
                     //Add the edge
                     graph.getNodeMap().addConnection(i, j);
                     
-                }else{}
-                //Otherwise do nothing
+                }//Otherwise do nothing
+                
+                int currentNum = i * j;
+                int totalNum = numNodes * numNodes;
+                
+                app.setProgress((double)currentNum/(double)totalNum, "Calculated " + currentNum + " of possible " + totalNum + " edges");
                 
             }
+            
+        }
+        
+        app.appendTextAreanl("Finished creating random edges");
+        app.appendTextAreanl("Building edge map...");
         
         graph.setEdgeMap(EdgeMap.buildEdgeMap(graph.getNodeMap()));
+        
+        app.appendTextAreanl("Finished building edge map");
         
         return graph;
         

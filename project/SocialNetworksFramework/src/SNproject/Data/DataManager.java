@@ -87,23 +87,34 @@ public class DataManager extends AppComponent{
         if(numGraphs <= 0)
             throw new NumberFormatException();
         
-        ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
+        final ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
+        
+        Thread thread = new Thread(() -> {
         
         GraphProperties props = new GraphProperties();
         props.setNumNodes(graphToTest.getNodeMap().getNumNodes());
         props.setLinkProb(.5);
         
+        Graph randGraph;
+        
         for(int i = 0; i < numGraphs; i++){
             
-            app.appendTextArea("Generating graph " + i  + "...");
+            app.appendTextAreanl("Generating graph " + i+1 + "...");
             
-            Graph newRandGraph = Graph.generateRandomGraph(props);
-            randomGraphs.add(newRandGraph);
+            randGraph = Graph.generateRandomGraph(props, app);
             
-            app.appendTextAreanl(" DONE");
+            randomGraphs.add(randGraph);
             
         }
         
+        });
+        thread.start();
+        
+        try{
+            thread.join();
+        }catch(InterruptedException ie){
+            System.err.println("Error: something was interrupted");
+        }
         return randomGraphs;
         
     }

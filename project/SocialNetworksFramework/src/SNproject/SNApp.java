@@ -5,6 +5,7 @@ import SNproject.Data.DataManager;
 import SNproject.File.FileManager;
 import java.io.File;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -101,7 +102,7 @@ public class SNApp extends Application{
         HBox numGraphsBox = new HBox(10);
         
         labelNumGraphs = new Label(RANDOM_LABEL_TEXT);
-        numGraphsField = new TextField();
+        numGraphsField = new TextField("0");
         numGraphsField.setPrefWidth(30);
         
         numGraphsBox.getChildren().addAll(labelNumGraphs, numGraphsField);
@@ -186,7 +187,10 @@ public class SNApp extends Application{
      */
     public void appendTextArea(String s){
         
-        outputArea.appendText(s);
+        if(Platform.isFxApplicationThread())
+            outputArea.appendText(s);
+        else
+            Platform.runLater(() -> outputArea.appendText(s));
         
     }
     
@@ -197,6 +201,12 @@ public class SNApp extends Application{
     public void appendTextAreanl(String s){
         
         appendTextArea(s + "\n");
+        
+    }
+    
+    public void appendTextAreanl(){
+        
+        appendTextAreanl("");
         
     }
     
@@ -217,7 +227,7 @@ public class SNApp extends Application{
      * Sets the application's progress level
      * @param d 
      */
-    public synchronized void setProgress(double d){
+    public void setProgress(double d){
         
         setProgress(d, "Progress : " + (int)(d*100) + "%");
         
@@ -228,10 +238,21 @@ public class SNApp extends Application{
      * @param d
      * @param s 
      */
-    public synchronized void setProgress(double d, String s){
+    public void setProgress(double d, String s){
         
-        progressLabel.setText(s);
-        progressBar.setProgress(d);
+        if(Platform.isFxApplicationThread()){
+            progressLabel.setText(s);
+            progressBar.setProgress(d);
+        }else{
+            
+            Platform.runLater(() -> {
+            
+                progressLabel.setText(s);
+                progressBar.setProgress(d);
+            
+            });
+            
+        }
         
     }
     

@@ -47,6 +47,8 @@ public class Controller extends AppComponent{
      */
     public void handleStartButton(){
         
+        app.disableButtons();
+        
         app.appendTextAreanl("-----------");
         app.appendTextAreanl("Starting...");
         
@@ -71,6 +73,8 @@ public class Controller extends AppComponent{
             }
         }
         
+        app.enableButtons();
+        
     }
     
     /**
@@ -79,6 +83,8 @@ public class Controller extends AppComponent{
     public void handleFileChooseButton(){
         
         System.out.println("Handle event for file choose button");
+        
+        app.disableButtons();
         
         FileChooser fc = FileChooserSingleton.getSingleton();
         
@@ -96,6 +102,8 @@ public class Controller extends AppComponent{
         app.getFileManager().setGraphFile(chosenFile);
         app.getDataManager().initData();
         app.setChosenFile(app.getFileManager().getGraphFile());
+        
+        app.enableButtons();
         
     }
     
