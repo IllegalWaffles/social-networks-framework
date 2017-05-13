@@ -224,37 +224,16 @@ public class SNApp extends Application{
     }
     
     /**
-     * Sets the application's progress level
-     * @param d 
+     * 
+     * @return 
      */
-    public void setProgress(double d){
-        
-        setProgress(d, "Progress : " + (int)(d*100) + "%");
-        
-    }
+    public ProgressBar getProgressBar(){return progressBar;}
     
     /**
-     * Sets the application's progress level with a specific message
-     * @param d
-     * @param s 
+     * 
+     * @return 
      */
-    public void setProgress(double d, String s){
-        
-        if(Platform.isFxApplicationThread()){
-            progressLabel.setText(s);
-            progressBar.setProgress(d);
-        }else{
-            
-            Platform.runLater(() -> {
-            
-                progressLabel.setText(s);
-                progressBar.setProgress(d);
-            
-            });
-            
-        }
-        
-    }
+    public Label getProgressLabel(){return progressLabel;}
     
     /**
      * Disables the start button
@@ -262,7 +241,13 @@ public class SNApp extends Application{
      */
     public void disableStart(boolean val){
         
-        startButton.setDisable(val);
+        if(Platform.isFxApplicationThread())
+            startButton.setDisable(val);
+            
+        else
+            Platform.runLater(() -> startButton.setDisable(val));
+        
+        
         
     }
     
@@ -278,7 +263,11 @@ public class SNApp extends Application{
      */
     public void disableChoose(boolean val){
         
-        chooseButton.setDisable(val);
+        if(Platform.isFxApplicationThread())
+            chooseButton.setDisable(val);
+        
+        else
+            Platform.runLater(() -> chooseButton.setDisable(val));
         
     }
     
@@ -301,6 +290,8 @@ public class SNApp extends Application{
         disableChoose(false);
         
     }
+    
+    
     
     /**
      * Returns the main stage (gui)

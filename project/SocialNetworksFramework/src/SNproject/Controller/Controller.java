@@ -52,28 +52,43 @@ public class Controller extends AppComponent{
         app.appendTextAreanl("-----------");
         app.appendTextAreanl("Starting...");
         
+        
+        
         if(app.getFileManager().getGraphFile() == null){
             
             System.out.println("No input file initialized");
             app.appendTextAreanl("Error: no input file initialized.\nPlease pick a file with a valid format");
             
+            app.enableButtons();
+            
         }else{
             
             app.appendTextAreanl("Generating random graphs...");
             
-            try{
             
-                ArrayList<Graph> randomGraphs = app.getDataManager().generateRandomGraphData();
+            Thread thread = new Thread(() -> {
             
-            }catch(NumberFormatException nfe){
+                try{
+
+                    ArrayList<Graph> randomGraphs = app.getDataManager().generateRandomGraphData();
+                    app.appendTextAreanl("Finished initializing random graphs");
+                    
+                }catch(NumberFormatException nfe){
+                    
+                    System.out.println("Error: invalid number of graphs entered");
+                    app.appendTextAreanl("Error: invalid number of graphs entered");
+
+                }finally{
                 
-                System.out.println("Error: invalid number of graphs entered");
-                app.appendTextAreanl("Error: invalid number of graphs entered");
+                    app.enableButtons();
                 
-            }
+                }
+                
+            });
+            
+            thread.start();
+            
         }
-        
-        app.enableButtons();
         
     }
     
@@ -83,26 +98,38 @@ public class Controller extends AppComponent{
     public void handleFileChooseButton(){
         
         System.out.println("Handle event for file choose button");
-        
+
         app.disableButtons();
-        
+
         FileChooser fc = FileChooserSingleton.getSingleton();
-        
-        File chosenFile = fc.showOpenDialog(app.getMainStage());
-        
+
+        final File chosenFile = fc.showOpenDialog(app.getMainStage());
+
         String filename;
         if(chosenFile == null) 
             filename = "No file chosen";
         else 
             filename = chosenFile.getName();
-        
+
         System.out.printf("File choosen: %s\n", filename);
         app.appendTextArea("File chosen: " + filename + "\n");
-        
+
         app.getFileManager().setGraphFile(chosenFile);
-        app.getDataManager().initData();
-        app.setChosenFile(app.getFileManager().getGraphFile());
+            
+        Thread thread = new Thread(() -> {
+            
+            app.getDataManager().initData();
         
+        });
+        thread.start();
+        
+        try{
+            thread.join();
+        }catch(InterruptedException ie){
+            System.err.println("Error: something was interrupted");
+        }
+        
+        app.setChosenFile(app.getFileManager().getGraphFile());
         app.enableButtons();
         
     }

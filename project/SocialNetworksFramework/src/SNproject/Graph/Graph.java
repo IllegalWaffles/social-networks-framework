@@ -12,6 +12,8 @@ import SNproject.SNApp;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -58,55 +60,104 @@ public class Graph {
     
     public static Graph generateRandomGraph(GraphProperties parameters, SNApp app){
         
-        Random rand = new Random();
-        Graph graph = new Graph();
+        final Graph graph = new Graph();
         
-        if(parameters == null)
-            throw new IllegalArgumentException("Parameters was null");
+        Task task = new Task<Void>() {
         
-        int numNodes =      parameters.getNumNodes();
-        double edgeProb =   parameters.getLinkProb();
-        
-        app.appendTextAreanl("Populating node map...");
-        
-        //Populate the node map
-        for(int i = 0; i < numNodes; i++){
+            @Override 
+            public Void call(){
             
-            graph.getNodeMap().put(i, new Node(i));
-            
-        }
-        
-        app.appendTextAreanl("Finished populating node map");
-        app.appendTextAreanl("Creating random edges...");
-        
-        for(int i = 0; i < numNodes; i++){
-            
-            for(int j = 0; j < numNodes-i; j++){
+                final Random rand = new Random();
                 
-                double roll = rand.nextInt(100)/100.0;
+                if(parameters == null)
+                    throw new IllegalArgumentException("Parameters was null");
+
+                int numNodes =      parameters.getNumNodes();
+                double edgeProb =   parameters.getLinkProb();
+                double numPossibleEdges = 0;
                 
-                if(roll <= edgeProb){
-                    
-                    //Add the edge
-                    graph.getNodeMap().addConnection(i, j);
-                    
-                }//Otherwise do nothing
+                for(int i = 0; i < numNodes; i++)
+                    for(int j = 0; j < numNodes-i; j++)
+                        numPossibleEdges++;
                 
-                int currentNum = i * j;
-                int totalNum = numNodes * numNodes;
+
+
+                app.appendTextAreanl("Populating node map...");
+
+                //Populate the node map
+                for(int i = 0; i < numNodes; i++){
+
+                    graph.getNodeMap().put(i, new Node(i));
+
+                }
                 
-                app.setProgress((double)currentNum/(double)totalNum, "Calculated " + currentNum + " of possible " + totalNum + " edges");
-                
+                app.appendTextAreanl("Finished populating node map");
+                app.appendTextAreanl("Creating random edges...");
+
+                for(int i = 0; i < numNodes; i++){
+
+                    for(int j = 0; j < numNodes-i; j++){
+
+                        double roll = rand.nextInt(100)/100.0;
+
+                        if(roll <= edgeProb){
+
+                            //Add the edge
+                            graph.getNodeMap().addConnection(i, j);
+
+                        }//Otherwise do nothing
+
+                        int currentNum = i * j;
+
+                        updateProgress(currentNum, numPossibleEdges);
+                        updateMessage(String.format("Generated %9d edges from a possible %d", currentNum, (int)numPossibleEdges));
+                        
+                    }
+
+                }
+
+                app.appendTextAreanl("Finished creating random edges");
+                app.appendTextAreanl("Building edge map...");
+
+                graph.setEdgeMap(EdgeMap.buildEdgeMap(graph.getNodeMap()));
+
+                app.appendTextAreanl("Finished building edge map");
+
+                return null;
+
             }
+        
+        };
+        
+        Platform.runLater(() -> {
+        
+            app.getProgressBar().progressProperty().bind(task.progressProperty());
+            app.getProgressLabel().textProperty().bind(task.messageProperty());
+        
+        });
+        
+        Thread thread = new Thread(task);
+        
+        //Start the thread
+        thread.start();
+        
+        try{
+        
+            //Wait for it to finish
+            thread.join();
+        
+        }catch(InterruptedException e){
+            
+            System.out.println("Something was interrupted: " + e.getMessage());
             
         }
         
-        app.appendTextAreanl("Finished creating random edges");
-        app.appendTextAreanl("Building edge map...");
+        Platform.runLater(() -> {
         
-        graph.setEdgeMap(EdgeMap.buildEdgeMap(graph.getNodeMap()));
+            app.getProgressBar().progressProperty().unbind();
+            app.getProgressLabel().textProperty().unbind();
         
-        app.appendTextAreanl("Finished building edge map");
+        });
         
         return graph;
         

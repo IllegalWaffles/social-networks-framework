@@ -60,6 +60,8 @@ public class DataManager extends AppComponent{
                 app.appendTextAreanl("Finished building edge map");
                 app.appendTextAreanl("Finished initializing data");
                 
+                app.appendTextAreanl("Number of nodes in map:" + graphToTest.getNumNodes());
+                
                 app.appendTextAreanl("READY!");
                 
             }catch(IOException e){
@@ -87,9 +89,7 @@ public class DataManager extends AppComponent{
         if(numGraphs <= 0)
             throw new NumberFormatException();
         
-        final ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
-        
-        Thread thread = new Thread(() -> {
+        ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
         
         GraphProperties props = new GraphProperties();
         props.setNumNodes(graphToTest.getNodeMap().getNumNodes());
@@ -99,22 +99,12 @@ public class DataManager extends AppComponent{
         
         for(int i = 0; i < numGraphs; i++){
             
-            app.appendTextAreanl("Generating graph " + i+1 + "...");
-            
+            app.appendTextAreanl("Generating graph " + (i+1) + "...");
             randGraph = Graph.generateRandomGraph(props, app);
-            
             randomGraphs.add(randGraph);
             
         }
         
-        });
-        thread.start();
-        
-        try{
-            thread.join();
-        }catch(InterruptedException ie){
-            System.err.println("Error: something was interrupted");
-        }
         return randomGraphs;
         
     }
