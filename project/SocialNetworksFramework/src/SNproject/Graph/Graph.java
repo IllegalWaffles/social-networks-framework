@@ -19,6 +19,8 @@ public class Graph {
     private NodeMap nodemap;
     private EdgeMap edgemap;
     
+    private static SNApp app;
+    
     public Graph(){
     
         nodemap = new NodeMap();
@@ -43,6 +45,10 @@ public class Graph {
             
         }
         
+    }
+    
+    public static void setApp(SNApp initapp){
+        app = initapp;
     }
     
     public NodeMap getNodeMap(){return nodemap;}
@@ -70,7 +76,7 @@ public class Graph {
     
     }
     
-    public static Graph generateRandomGraph(GraphProperties parameters, SNApp app){
+    public static Graph generateRandomGraph(GraphProperties parameters){
         
         final Graph graph = new Graph();
         
@@ -86,13 +92,13 @@ public class Graph {
 
                 int numNodes =      parameters.getNumNodes();
                 double edgeProb =   parameters.getLinkProb();
-                double numPossibleEdges;
+                int maxNumEdges =   parameters.getMaxNumEdges();
                 int numEdgesCreated = 0;
                 boolean finishedFlag = false;
                 
                 if(app != null){
                     app.appendTextAreanl("Generating graph with " + numNodes + " and with probability " + edgeProb);
-                    app.appendTextAreanl("Graph will have a maximum of " + parameters.getMaxNumEdges() + " edges");
+                    app.appendTextAreanl("Graph will have a maximum of " + maxNumEdges + " edges");
                 }
 
                 if(app != null)
@@ -101,9 +107,6 @@ public class Graph {
                 //Populate the node map
                 for(int i = 0; i < numNodes; i++)
                     graph.getNodeMap().put(i, new Node(i));
-
-                //Calculate the total number of possible edges
-                numPossibleEdges = graph.getNumPossibleEdges();
                 
                 if(app != null){
                 
@@ -129,10 +132,16 @@ public class Graph {
                             
                         }//Otherwise do nothing
 
-                        int currentNum = i * j;
-
-                        updateProgress(currentNum, numPossibleEdges);
-                        updateMessage(String.format("Generated %9d edges from a possible %d", currentNum, (int)numPossibleEdges));
+                        if(numEdgesCreated % 50 == 0 || finishedFlag)
+                            updateProgress(numEdgesCreated, parameters.getMaxNumEdges());
+                        
+                        if(numEdgesCreated % 1000 == 0 || finishedFlag)
+                            updateMessage(String.format("Generated %d edges from a possible %d (%d%%)", 
+                                    numEdgesCreated, 
+                                    maxNumEdges, 
+                                    (int)((numEdgesCreated/(double)maxNumEdges)*100.0)));
+                        
+                        System.out.println();
                         
                         if(finishedFlag)
                             break;
@@ -166,9 +175,12 @@ public class Graph {
         
             Platform.runLater(() -> {
 
+                app.getProgressBar().progressProperty().unbind();
+                app.getProgressLabel().textProperty().unbind();
+                
                 app.getProgressBar().progressProperty().bind(task.progressProperty());
                 app.getProgressLabel().textProperty().bind(task.messageProperty());
-
+                
             });
         
         }
@@ -187,17 +199,6 @@ public class Graph {
             
             System.out.println("Something was interrupted: " + e.getMessage());
             
-        }
-        
-        if(app != null){
-        
-            Platform.runLater(() -> {
-
-                app.getProgressBar().progressProperty().unbind();
-                app.getProgressLabel().textProperty().unbind();
-
-            });
-        
         }
         
         if(app != null){

@@ -1,5 +1,6 @@
 package SNproject.FileChooserSingleton;
 
+import java.io.File;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
@@ -54,6 +55,7 @@ public class FileChooserSingleton {
                 new ExtensionFilter("Text Files", "*.txt"),
                 new ExtensionFilter("Graph Data Files", "*.grph")
         );
+        chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         
     }
     

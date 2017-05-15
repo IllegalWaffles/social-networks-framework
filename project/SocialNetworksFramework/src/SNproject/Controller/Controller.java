@@ -76,7 +76,7 @@ public class Controller extends AppComponent{
                         app.appendTextAreanl("Calculating clustering coefficient for random graph " + (i+1));
                         Graph g = randomGraphs.get(i);
                         CCRandValues.add(g.getClusteringCoefficient());
-                        app.appendTextAreanl("Calculated cluster coefficient: " + CCRandValues.get(i));
+                        //app.appendTextAreanl(String.format("Calculated cluster coefficient: %.9f", CCRandValues.get(i)));
                         
                     }
                     
@@ -87,11 +87,11 @@ public class Controller extends AppComponent{
                     
                     double averageCC = temp/CCRandValues.size();
                     
-                    app.appendTextAreanl("Average cluster coefficient: " + averageCC);
+                    //app.appendTextAreanl(String.format("Average cluster coefficient: %.9f", averageCC));
                     
                     app.appendTextAreanl("Calculating test cluster coefficient...");
                     double testCC = app.getDataManager().getTestGraph().getClusteringCoefficient();
-                    app.appendTextAreanl("Test cluster coefficient: " + testCC);
+                    //app.appendTextAreanl(String.format("Test cluster coefficient: %.9f", testCC));
                     
                 }catch(NumberFormatException nfe){
                     

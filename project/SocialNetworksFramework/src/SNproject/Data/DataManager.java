@@ -99,11 +99,12 @@ public class DataManager extends AppComponent{
         props.setMaxNumEdges(graphToTest.getNumEdges());
         
         Graph randGraph;
+        Graph.setApp(app);
         
         for(int i = 0; i < numGraphs; i++){
             
             app.appendTextAreanl("Generating graph " + (i+1) + "...");
-            randGraph = Graph.generateRandomGraph(props, app);
+            randGraph = Graph.generateRandomGraph(props);
             randomGraphs.add(randGraph);
             app.appendTextAreanl(DIVIDER);
             

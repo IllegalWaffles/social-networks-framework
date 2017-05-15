@@ -22,7 +22,6 @@ public class NodeMap extends HashMap<Integer, Node>{
     
     public void printDegreeDistribution(String filename) throws IOException{
         
-        HashMap<Integer, Integer> distributionMap = new HashMap<Integer, Integer>();
         boolean omitZeros = true;
         
         int highest_degree = -1;
