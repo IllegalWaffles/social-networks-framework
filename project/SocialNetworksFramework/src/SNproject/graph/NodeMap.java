@@ -19,7 +19,6 @@ public class NodeMap extends HashMap<Integer, Node>{
     public NodeMap() {edgecount = 0;}
     public int getEdgecount(){return edgecount;}
     public void incEdgecount(){edgecount++;}
-    public int getNumNodes(){return this.size();}
     
     public void printDegreeDistribution(String filename) throws IOException{
         
@@ -73,6 +72,9 @@ public class NodeMap extends HashMap<Integer, Node>{
                             trianglesList.put(triangle.hashString(), triangle);
                             numTriangles++;
                             
+                            if(numTriangles % 10000 == 0)
+                                System.out.println("Counted " + numTriangles + " triangles");
+                            
                         }
                         
                     }
@@ -90,6 +92,14 @@ public class NodeMap extends HashMap<Integer, Node>{
     public double clusteringCoefficient(int numNodes, double numTriangles){
     
         return numTriangles/nChoose3(numNodes);
+    
+    }
+    
+    public double clusteringCoefficient(){
+    
+        int numtriangles = this.countTriangles();
+        
+        return clusteringCoefficient(this.size(),numtriangles);
     
     }
     

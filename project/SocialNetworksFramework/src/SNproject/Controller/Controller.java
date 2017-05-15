@@ -73,6 +73,17 @@ public class Controller extends AppComponent{
                     ArrayList<Graph> randomGraphs = app.getDataManager().generateRandomGraphData();
                     app.appendTextAreanl("Finished initializing random graphs");
                     
+                    ArrayList<Double> CCRandValues = new ArrayList();
+                    
+                    for(int i = 0; i < randomGraphs.size(); i++){
+                        
+                        app.appendTextAreanl("Calculating clustering coefficient for random graph " + (i+1));
+                        Graph g = randomGraphs.get(i);
+                        CCRandValues.add(g.getClusteringCoefficient());
+                        app.appendTextAreanl("Calculated cluster coefficient: " + CCRandValues.get(i));
+                        
+                    }
+                    
                 }catch(NumberFormatException nfe){
                     
                     System.out.println("Error: invalid number of graphs entered");

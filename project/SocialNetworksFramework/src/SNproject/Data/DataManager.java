@@ -60,7 +60,10 @@ public class DataManager extends AppComponent{
                 app.appendTextAreanl("Finished building edge map");
                 app.appendTextAreanl("Finished initializing data");
                 
-                app.appendTextAreanl("Number of nodes in map:" + graphToTest.getNumNodes());
+                app.appendTextAreanl("Number of nodes in map: " + graphToTest.getNumNodes());
+                app.appendTextAreanl("Number of edges in map: " + graphToTest.getNumEdges());
+                app.appendTextArea("Number of possible edges: " + graphToTest.getNumPossibleEdges());
+                app.appendTextAreanl(String.format(" (%.2f%%)", graphToTest.getEdgeDensity()*100.0));
                 
                 app.appendTextAreanl("READY!");
                 
@@ -92,8 +95,9 @@ public class DataManager extends AppComponent{
         ArrayList<Graph> randomGraphs = new ArrayList<Graph>();
         
         GraphProperties props = new GraphProperties();
-        props.setNumNodes(graphToTest.getNodeMap().getNumNodes());
-        props.setLinkProb(.5);
+        props.setNumNodes(graphToTest.getNumNodes());
+        props.setLinkProb(graphToTest.getEdgeDensity());
+        props.setMaxNumEdges(graphToTest.getNumEdges());
         
         Graph randGraph;
         

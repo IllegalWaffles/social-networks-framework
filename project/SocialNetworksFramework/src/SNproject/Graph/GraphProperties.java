@@ -13,6 +13,11 @@ public class GraphProperties{
     
     private double link_prob;
     private int num_nodes;
+    private int max_num_edges;
+    
+    public void setMaxNumEdges(int i){
+        max_num_edges = i;
+    }
     
     public void setLinkProb(double d){
         link_prob = d;
@@ -20,6 +25,10 @@ public class GraphProperties{
     
     public void setNumNodes(int i){
         num_nodes = i;
+    }
+    
+    public int getMaxNumEdges(){
+        return max_num_edges;
     }
     
     public double getLinkProb(){
