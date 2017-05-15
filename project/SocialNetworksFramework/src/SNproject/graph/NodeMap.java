@@ -72,8 +72,8 @@ public class NodeMap extends HashMap<Integer, Node>{
                             trianglesList.put(triangle.hashString(), triangle);
                             numTriangles++;
                             
-                            if(numTriangles % 10000 == 0)
-                                System.out.println("Counted " + numTriangles + " triangles");
+//                            if(numTriangles % 10000 == 0)
+//                                System.out.println("Counted " + numTriangles + " triangles");
                             
                         }
                         

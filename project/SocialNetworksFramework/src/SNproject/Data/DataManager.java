@@ -4,6 +4,7 @@ import SNproject.AppComponent;
 import SNproject.Graph.Graph;
 import SNproject.Graph.GraphProperties;
 import SNproject.SNApp;
+import static SNproject.SNApp.DIVIDER;
 import SNproject.graph.EdgeMap;
 import SNproject.graph.NodeMap;
 import java.io.File;
@@ -18,9 +19,6 @@ public class DataManager extends AppComponent{
     
     private Graph graphToTest;
     
-//    private NodeMap graphNodeMap;
-//    private EdgeMap graphEdgeMap;
-    
     private ArrayList<Graph> randomGraphList;
     
     /**
@@ -34,6 +32,7 @@ public class DataManager extends AppComponent{
         
     }
     
+    public Graph getTestGraph(){return graphToTest;}
     
     public void initData(){
         
@@ -106,6 +105,7 @@ public class DataManager extends AppComponent{
             app.appendTextAreanl("Generating graph " + (i+1) + "...");
             randGraph = Graph.generateRandomGraph(props, app);
             randomGraphs.add(randGraph);
+            app.appendTextAreanl(DIVIDER);
             
         }
         

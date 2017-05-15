@@ -6,7 +6,6 @@ import SNproject.File.FileManager;
 import java.io.File;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -35,18 +33,20 @@ public class SNApp extends Application{
     private static final String DEFAULT_CHOSEN_FILE_TEXT = "No file chosen";
     private static final String RANDOM_LABEL_TEXT = "Num random graphs:";
     
-    private static final int APP_WIDTH = 700;
-    private static final int APP_HEIGHT = 500;
+    private static final int APP_WIDTH = 900;
+    private static final int APP_HEIGHT = 700;
     
-    private static final int PROGRESS_BAR_WIDTH = 300;
+    private static final int PROGRESS_BAR_WIDTH = 500;
     
     private static final int TEXT_AREA_WIDTH = PROGRESS_BAR_WIDTH;
-    private static final int TEXT_AREA_HEIGHT = 375;
+    private static final int TEXT_AREA_HEIGHT = 575;
     
     private static final int FIRST_COLUMN_WIDTH = 300;
     private static final int SECOND_COLUMN_WIDTH = 0;
     
     private static final double LINK_PROB = .5;
+    
+    public static final String DIVIDER = "----------";
     
     private Stage mainStage;
     

@@ -1,14 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package SNproject.Controller;
 
 import SNproject.AppComponent;
 import SNproject.FileChooserSingleton.FileChooserSingleton;
 import SNproject.Graph.Graph;
 import SNproject.SNApp;
+import static SNproject.SNApp.DIVIDER;
 import java.io.File;
 import static java.lang.System.exit;
 import java.util.ArrayList;
@@ -49,7 +45,7 @@ public class Controller extends AppComponent{
         
         app.disableButtons();
         
-        app.appendTextAreanl("-----------");
+        app.appendTextAreanl(DIVIDER);
         app.appendTextAreanl("Starting...");
         
         
@@ -83,6 +79,19 @@ public class Controller extends AppComponent{
                         app.appendTextAreanl("Calculated cluster coefficient: " + CCRandValues.get(i));
                         
                     }
+                    
+                    app.appendTextAreanl(DIVIDER);
+                    double temp = 0;
+                    for(double cc : CCRandValues)
+                        temp += cc;
+                    
+                    double averageCC = temp/CCRandValues.size();
+                    
+                    app.appendTextAreanl("Average cluster coefficient: " + averageCC);
+                    
+                    app.appendTextAreanl("Calculating test cluster coefficient...");
+                    double testCC = app.getDataManager().getTestGraph().getClusteringCoefficient();
+                    app.appendTextAreanl("Test cluster coefficient: " + testCC);
                     
                 }catch(NumberFormatException nfe){
                     
