@@ -79,9 +79,9 @@ public class Graph {
     
     }
     
-    public double getAveragePathLength(){
+    public PathLengthReturn getAveragePathLength(){
     
-        final MyDouble taskRetVal = new MyDouble();
+        final PathLengthReturn taskRetVal = new PathLengthReturn();
         
         //This task calculates the average path length
         Task<Double> task = new Task() {
@@ -97,7 +97,6 @@ public class Graph {
                 final int numPathsToCalculate = ((numNodes - 1) * (numNodes)) / 2;
                 int pathCalcCounter = 0;
 
-
                 //Iterate through every node as a start point
                 for(Node start : nodemap.values()){
 
@@ -111,12 +110,17 @@ public class Graph {
 
                         //Calculate the path length
                         pathLength = nodemap.getPathLength(start, end);
-                        totalPathLength += pathLength;
+                        
+                        if(pathLength == -1)
+                            taskRetVal.numMisses++;
+                        else
+                            totalPathLength += pathLength;
+                        
                         pathCalcCounter++;
 
                         updateProgress(pathCalcCounter, numPathsToCalculate);
                         
-                        if(pathCalcCounter % 1000 == 0)
+                        if(pathCalcCounter % 10 == 0)
                             updateMessage("Found " + pathCalcCounter + " paths out of " + numPathsToCalculate);
                         
                     }
@@ -127,7 +131,7 @@ public class Graph {
 
                 }
         
-            taskRetVal.myDouble = (double)totalPathLength/(double)numPathsToCalculate;
+            taskRetVal.averagePathLength = (double)totalPathLength/(double)numPathsToCalculate;
             return null;
             
             }
@@ -164,7 +168,18 @@ public class Graph {
             
         }
         
-        return taskRetVal.myDouble;
+        if(app != null){
+        
+            Platform.runLater(() -> {
+            
+                app.getProgressBar().progressProperty().unbind();
+                app.getProgressLabel().textProperty().unbind();
+            
+            });
+        
+        }
+        
+        return taskRetVal;
         
     }
     
@@ -294,6 +309,17 @@ public class Graph {
         if(app != null){
         
             app.appendTextAreanl("Generated graph has " + graph.getNumNodes() + " nodes and " + graph.getNumEdges() + " edges");
+        
+        }
+        
+        if(app != null){
+        
+            Platform.runLater(() -> {
+            
+                app.getProgressBar().progressProperty().unbind();
+                app.getProgressLabel().textProperty().unbind();
+            
+            });
         
         }
         

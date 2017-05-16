@@ -3,12 +3,12 @@ package SNproject.Controller;
 import SNproject.AppComponent;
 import SNproject.FileChooserSingleton.FileChooserSingleton;
 import SNproject.Graph.Graph;
+import SNproject.Graph.PathLengthReturn;
 import SNproject.SNApp;
 import static SNproject.SNApp.DIVIDER;
 import java.io.File;
 import static java.lang.System.exit;
 import java.util.ArrayList;
-import javafx.application.Platform;
 import javafx.stage.FileChooser;
 
 /**
@@ -37,6 +37,16 @@ public class Controller extends AppComponent{
         app.getMainStage().close();
         exit(0);
         
+    }
+    
+    /**
+     * Handles when the user clicks the clear button
+     */
+    public void handleClearButton(){
+    
+        app.clearTextArea();
+        app.clearProgress();
+    
     }
     
     /**
@@ -71,7 +81,7 @@ public class Controller extends AppComponent{
                     app.appendTextAreanl("Finished initializing random graphs");
                     
                     ArrayList<Double> clusteringCoefficientValuesRandom = new ArrayList();
-                    ArrayList<Double> averagePathLengthsRandom = new ArrayList();
+                    ArrayList<PathLengthReturn> averagePathLengthsRandom = new ArrayList();
                     
                     for(int i = 0; i < randomGraphs.size(); i++){
                         
@@ -99,21 +109,35 @@ public class Controller extends AppComponent{
                     
                     app.appendTextAreanl(DIVIDER);
                     temp = 0;
-                    for(double apl : averagePathLengthsRandom)
-                        temp += apl;
+                    for(PathLengthReturn apl : averagePathLengthsRandom)
+                        temp += apl.averagePathLength;
                     
                     //This holds the average average path length of the randomly generated graphs
                     double averagePathLength = temp/averagePathLengthsRandom.size();
                     
-                    app.appendTextAreanl("Calculating test cluster coefficient...");
+                    temp = 0;
+                    for(PathLengthReturn apl : averagePathLengthsRandom)
+                        temp += apl.numMisses;
                     
+                    double averageMissCount = (double)temp/averagePathLengthsRandom.size();
+                    
+                    app.appendTextAreanl("Calculating test cluster coefficient...");
                     //Holds the clustering coefficient of the test graph
                     double testCC = app.getDataManager().getTestGraph().getClusteringCoefficient();
                     
                     app.appendTextAreanl("Calculating test average path length...");
-                    
                     //Holds the average path length of the test graph
-                    double testAPL = app.getDataManager().getTestGraph().getAveragePathLength();
+                    PathLengthReturn testAPL = app.getDataManager().getTestGraph().getAveragePathLength();
+                    
+                    app.appendTextAreanl(DIVIDER);
+                    
+                    //Final values get printed here
+                    app.appendTextAreanl(String.format("TEST CLUSTER COEFFICIENT: %f", testCC));
+                    app.appendTextAreanl(String.format("RANDOM GRAPH CLUSTER COEFFICIENT: %f", averageRandomCC));
+                    app.appendTextAreanl("TEST AVERAGE PATH LENGTH: " + testAPL.averagePathLength);
+                    app.appendTextAreanl("RANDOM AVERAGE PATH LENGTH: " + averagePathLength);
+                    app.appendTextAreanl("NUMBER OF MISSES IN TEST GRAPH: " + testAPL.numMisses);
+                    app.appendTextAreanl("NUMBER OF MISSES IN RANDOM GRAPHS: " + averageMissCount);
                     
                 }catch(NumberFormatException nfe){
                     

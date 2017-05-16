@@ -201,33 +201,82 @@ public class NodeMap extends HashMap<Integer, Node>{
     
     public int getPathLength(Node start, Node end){
     
-        if(!this.values().contains(start) || !this.values().contains(end) || start.equals(end))
+        if(!containsKey(start.getID()) || !containsKey(end.getID()) || start.equals(end))
             return -1;
         
         HashMap<Integer, Node> blob = new HashMap();
+        HashMap<Integer, Node> recentlyAdded = new HashMap();
+        HashMap<Integer, Node> temp = new HashMap();
         
         blob.put(start.getID(), start);
+        recentlyAdded.put(start.getID(), start);
         int distance = 0;
         
         while(true)
         {
         
-            distance++;
-            for(Node n : blob.values()){
+//            System.out.println("Current distance: " + distance);
+//            System.out.print("Blob values: ");
+//            printHashValues(blob);
+//            
+//            System.out.print("Most recently added nodes: ");
+//            printHashValues(recentlyAdded);
             
-                ArrayList<Integer> adjacents = n.connections();
-                for(int connection : adjacents)
-                {
+            //Increment distance, as this is the next level
+            distance++;
+            
+            if(recentlyAdded.isEmpty()){
+              
+                //System.out.println("Path cannot be found. Returning -1");
+                return -1;
                 
+            } 
+            
+            //Of the most recently added nodes,
+            for(Node justAdded : recentlyAdded.values()){
+            
+                if(justAdded.connections().contains(end.getID())){
+
+                    //System.out.println("Node found: printing distance: " + distance);
+                    return distance;
                     
+                }
                 
+                //For all their adjacent nodes,
+                for(int newAdj : justAdded.connections()){
+                    
+                    //Check if the adjacent is in the blob. If it is, do nothing
+                    if(!blob.containsKey(newAdj)){
+                        
+                        Node node = get(newAdj);
+                        
+                        temp.put(node.getID(), node);
+                        blob.put(node.getID(), node);
+                    
+                    }
+                    
                 }
                 
             }
-        
+            
+            recentlyAdded.clear();
+            recentlyAdded.putAll(temp);
+            temp.clear();
         
         }
     
+    }
+    
+    private void printHashValues(HashMap<Integer, Node> map){
+    
+        for(Node n : map.values()){
+        
+            System.out.print(n.getID() + " ");
+        
+        }
+    
+        System.out.println();
+        
     }
     
 }

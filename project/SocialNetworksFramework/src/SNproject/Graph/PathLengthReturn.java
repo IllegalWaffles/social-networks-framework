@@ -7,8 +7,9 @@ package SNproject.Graph;
  * multi-threaded applications.
  * @author Kuba
  */
-public class MyDouble {
+public class PathLengthReturn {
     
-    public double myDouble;
+    public double averagePathLength;
+    public int numMisses;
     
 }

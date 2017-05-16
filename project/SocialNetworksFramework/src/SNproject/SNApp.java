@@ -28,10 +28,12 @@ public class SNApp extends Application{
     private static final String EXIT_TEXT = "Exit";
     private static final String START_TEXT = "Start Calculations";
     private static final String CHOOSER_TEXT = "Choose graph data";
-    private static final String PROGRESS_LABEL = "Default progress message";
+    private static final String PROGRESS_LABEL = "No progress made yet";
     private static final String TEXT_AREA_DEFAULT = "Welcome\n";
     private static final String DEFAULT_CHOSEN_FILE_TEXT = "No file chosen";
     private static final String RANDOM_LABEL_TEXT = "Num random graphs:";
+    private static final String NUM_GRAPHS_FIELD = "1";
+    private static final String CLEAR_BUTTON_TEXT = "Clear";
     
     private static final int APP_WIDTH = 900;
     private static final int APP_HEIGHT = 700;
@@ -55,6 +57,7 @@ public class SNApp extends Application{
     
     private Button exitButton;
     private Button startButton;
+    private Button clearButton;
     
     private Button chooseButton;
     private TextField fileChosenField;
@@ -90,6 +93,7 @@ public class SNApp extends Application{
         
         exitButton = new Button(EXIT_TEXT);
         startButton = new Button(START_TEXT);
+        clearButton = new Button(CLEAR_BUTTON_TEXT);
         
         HBox chooseBox = new HBox(10);
         
@@ -102,7 +106,7 @@ public class SNApp extends Application{
         HBox numGraphsBox = new HBox(10);
         
         labelNumGraphs = new Label(RANDOM_LABEL_TEXT);
-        numGraphsField = new TextField("0");
+        numGraphsField = new TextField(NUM_GRAPHS_FIELD);
         numGraphsField.setPrefWidth(30);
         
         numGraphsBox.getChildren().addAll(labelNumGraphs, numGraphsField);
@@ -127,7 +131,7 @@ public class SNApp extends Application{
         
         secondColumn.setPadding(new Insets(10));
         
-        firstColumn.getChildren().addAll(exitButton, chooseBox, numGraphsBox, startButton);
+        firstColumn.getChildren().addAll(exitButton, chooseBox, numGraphsBox, startButton, clearButton);
         secondColumn.getChildren().addAll(progressLabel, progressBar, outputArea);
         
         mainPane.getChildren().addAll(firstColumn, secondColumn);
@@ -166,6 +170,12 @@ public class SNApp extends Application{
         
         });
         
+        clearButton.setOnAction(e -> {
+        
+            controller.handleClearButton();
+        
+        });
+        
     }
     
     /**
@@ -176,9 +186,39 @@ public class SNApp extends Application{
         dataManager = new DataManager(this);
         fileManager = new FileManager(this);
     
-        //Initialize random graphs here
+    }
+    
+    /**
+     * Clears the gui's progress
+     */
+    public void clearProgress(){
+    
+        if(Platform.isFxApplicationThread()){
         
+            progressBar.setProgress(0);
+            progressLabel.setText(PROGRESS_LABEL);
+            
+        }else 
+            Platform.runLater(() -> {
+            
+                progressBar.setProgress(0);
+                progressLabel.setText(PROGRESS_LABEL);
+            
+            });
         
+    
+    }
+    
+    /**
+     * Clears the text area
+     */
+    public void clearTextArea(){
+    
+        if(Platform.isFxApplicationThread())
+            outputArea.clear();
+        else
+            Platform.runLater(() -> outputArea.clear());
+    
     }
     
     /**
