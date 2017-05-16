@@ -8,6 +8,7 @@ import static SNproject.SNApp.DIVIDER;
 import java.io.File;
 import static java.lang.System.exit;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.stage.FileChooser;
 
 /**
@@ -69,29 +70,50 @@ public class Controller extends AppComponent{
                     ArrayList<Graph> randomGraphs = app.getDataManager().generateRandomGraphData();
                     app.appendTextAreanl("Finished initializing random graphs");
                     
-                    ArrayList<Double> CCRandValues = new ArrayList();
+                    ArrayList<Double> clusteringCoefficientValuesRandom = new ArrayList();
+                    ArrayList<Double> averagePathLengthsRandom = new ArrayList();
                     
                     for(int i = 0; i < randomGraphs.size(); i++){
                         
                         app.appendTextAreanl("Calculating clustering coefficient for random graph " + (i+1));
                         Graph g = randomGraphs.get(i);
-                        CCRandValues.add(g.getClusteringCoefficient());
-                        //app.appendTextAreanl(String.format("Calculated cluster coefficient: %.9f", CCRandValues.get(i)));
+                        clusteringCoefficientValuesRandom.add(g.getClusteringCoefficient());
                         
                     }
                     
                     app.appendTextAreanl(DIVIDER);
                     double temp = 0;
-                    for(double cc : CCRandValues)
+                    for(double cc : clusteringCoefficientValuesRandom)
                         temp += cc;
                     
-                    double averageCC = temp/CCRandValues.size();
+                    //This hold the average clustering coefficients of the randomly generated graphs
+                    double averageRandomCC = temp/clusteringCoefficientValuesRandom.size();
                     
-                    //app.appendTextAreanl(String.format("Average cluster coefficient: %.9f", averageCC));
+                    for(int i = 0; i < randomGraphs.size(); i++){
+                    
+                        app.appendTextAreanl("Calculating average path length for random graph " + (i+1));
+                        Graph g = randomGraphs.get(i);
+                        averagePathLengthsRandom.add(g.getAveragePathLength());
+                    
+                    }
+                    
+                    app.appendTextAreanl(DIVIDER);
+                    temp = 0;
+                    for(double apl : averagePathLengthsRandom)
+                        temp += apl;
+                    
+                    //This holds the average average path length of the randomly generated graphs
+                    double averagePathLength = temp/averagePathLengthsRandom.size();
                     
                     app.appendTextAreanl("Calculating test cluster coefficient...");
+                    
+                    //Holds the clustering coefficient of the test graph
                     double testCC = app.getDataManager().getTestGraph().getClusteringCoefficient();
-                    //app.appendTextAreanl(String.format("Test cluster coefficient: %.9f", testCC));
+                    
+                    app.appendTextAreanl("Calculating test average path length...");
+                    
+                    //Holds the average path length of the test graph
+                    double testAPL = app.getDataManager().getTestGraph().getAveragePathLength();
                     
                 }catch(NumberFormatException nfe){
                     
@@ -118,13 +140,13 @@ public class Controller extends AppComponent{
     public void handleFileChooseButton(){
         
         System.out.println("Handle event for file choose button");
-
+        
         app.disableButtons();
 
         FileChooser fc = FileChooserSingleton.getSingleton();
-
+            
         final File chosenFile = fc.showOpenDialog(app.getMainStage());
-
+            
         String filename;
         if(chosenFile == null) 
             filename = "No file chosen";
@@ -135,18 +157,19 @@ public class Controller extends AppComponent{
         app.appendTextArea("File chosen: " + filename + "\n");
 
         app.getFileManager().setGraphFile(chosenFile);
-            
+
         Thread thread = new Thread(() -> {
-            
-            app.getDataManager().initData();
         
+            app.getDataManager().initData();
+
         });
+        
         thread.start();
         
         try{
             thread.join();
         }catch(InterruptedException ie){
-            System.err.println("Error: something was interrupted");
+            System.out.println("Something was interrupted: " + ie.getMessage());
         }
         
         app.setChosenFile(app.getFileManager().getGraphFile());

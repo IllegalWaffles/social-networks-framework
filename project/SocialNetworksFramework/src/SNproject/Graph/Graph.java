@@ -6,9 +6,12 @@ import SNproject.graph.NodeMap;
 import SNproject.SNApp;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 
 /**
  *
@@ -76,6 +79,95 @@ public class Graph {
     
     }
     
+    public double getAveragePathLength(){
+    
+        final MyDouble taskRetVal = new MyDouble();
+        
+        //This task calculates the average path length
+        Task<Double> task = new Task() {
+        
+            @Override
+            public Double call(){
+            
+                ArrayList<Node> nodesAlreadyCalculated = new ArrayList();
+                int pathLength = 0;
+                int totalPathLength = 0;
+
+                int numNodes = nodemap.size();
+                final int numPathsToCalculate = ((numNodes - 1) * (numNodes)) / 2;
+                int pathCalcCounter = 0;
+
+
+                //Iterate through every node as a start point
+                for(Node start : nodemap.values()){
+
+                    //For every starting node, iterate through every node as an end
+                    for(Node end : nodemap.values()){
+
+                        //If the destination node was already a starting node, skip
+                        //If the two nodes are the same, skip
+                        if(nodesAlreadyCalculated.contains(end) || start.equals(end))
+                            continue;
+
+                        //Calculate the path length
+                        pathLength = nodemap.getPathLength(start, end);
+                        totalPathLength += pathLength;
+                        pathCalcCounter++;
+
+                        updateProgress(pathCalcCounter, numPathsToCalculate);
+                        
+                        if(pathCalcCounter % 1000 == 0)
+                            updateMessage("Found " + pathCalcCounter + " paths out of " + numPathsToCalculate);
+                        
+                    }
+
+                    //Since every path was already calculated for the start node,
+                    //Ignore it for the rest of the paths
+                    nodesAlreadyCalculated.add(start);
+
+                }
+        
+            taskRetVal.myDouble = (double)totalPathLength/(double)numPathsToCalculate;
+            return null;
+            
+            }
+        
+        };
+        
+        if(app != null){
+        
+            Platform.runLater(() -> {
+
+                app.getProgressBar().progressProperty().unbind();
+                app.getProgressLabel().textProperty().unbind();
+                
+                app.getProgressBar().progressProperty().bind(task.progressProperty());
+                app.getProgressLabel().textProperty().bind(task.messageProperty());
+                
+            });
+        
+        }
+            
+        Thread thread = new Thread(task);
+        
+        //Start the thread
+        thread.start();
+        
+        try{
+        
+            //Wait for it to finish
+            thread.join();
+        
+        }catch(InterruptedException e){
+            
+            System.out.println("Something was interrupted: " + e.getMessage());
+            
+        }
+        
+        return taskRetVal.myDouble;
+        
+    }
+    
     public static Graph generateRandomGraph(GraphProperties parameters){
         
         final Graph graph = new Graph();
@@ -132,16 +224,14 @@ public class Graph {
                             
                         }//Otherwise do nothing
 
-                        if(numEdgesCreated % 50 == 0 || finishedFlag)
+                        //if(numEdgesCreated % 50 == 0 || finishedFlag)
                             updateProgress(numEdgesCreated, parameters.getMaxNumEdges());
                         
-                        if(numEdgesCreated % 1000 == 0 || finishedFlag)
+                        if(numEdgesCreated % 10 == 0 || finishedFlag)
                             updateMessage(String.format("Generated %d edges from a possible %d (%d%%)", 
                                     numEdgesCreated, 
                                     maxNumEdges, 
                                     (int)((numEdgesCreated/(double)maxNumEdges)*100.0)));
-                        
-                        System.out.println();
                         
                         if(finishedFlag)
                             break;

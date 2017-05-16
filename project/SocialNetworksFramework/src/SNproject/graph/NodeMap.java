@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -71,8 +72,6 @@ public class NodeMap extends HashMap<Integer, Node>{
                             trianglesList.put(triangle.hashString(), triangle);
                             numTriangles++;
                             
-//                            if(numTriangles % 10000 == 0)
-//                                System.out.println("Counted " + numTriangles + " triangles");
                             
                         }
                         
@@ -198,6 +197,37 @@ public class NodeMap extends HashMap<Integer, Node>{
         return true;
         
         
+    }
+    
+    public int getPathLength(Node start, Node end){
+    
+        if(!this.values().contains(start) || !this.values().contains(end) || start.equals(end))
+            return -1;
+        
+        HashMap<Integer, Node> blob = new HashMap();
+        
+        blob.put(start.getID(), start);
+        int distance = 0;
+        
+        while(true)
+        {
+        
+            distance++;
+            for(Node n : blob.values()){
+            
+                ArrayList<Integer> adjacents = n.connections();
+                for(int connection : adjacents)
+                {
+                
+                    
+                
+                }
+                
+            }
+        
+        
+        }
+    
     }
     
 }
