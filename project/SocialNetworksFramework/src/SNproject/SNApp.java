@@ -194,7 +194,7 @@ public class SNApp extends Application{
     public void clearProgress(){
     
         if(Platform.isFxApplicationThread()){
-        
+            
             progressBar.setProgress(0);
             progressLabel.setText(PROGRESS_LABEL);
             
@@ -276,6 +276,16 @@ public class SNApp extends Application{
     public Label getProgressLabel(){return progressLabel;}
     
     /**
+     * 
+     * @return 
+     */
+    public String getNumGraphsData(){
+        
+        return numGraphsField.getText();
+        
+    }
+    
+    /**
      * Disables the start button
      * @param val 
      */
@@ -288,12 +298,6 @@ public class SNApp extends Application{
             Platform.runLater(() -> startButton.setDisable(val));
         
         
-        
-    }
-    
-    public String getNumGraphsData(){
-        
-        return numGraphsField.getText();
         
     }
     
@@ -312,12 +316,27 @@ public class SNApp extends Application{
     }
     
     /**
+     * 
+     * @param val 
+     */
+    public void disableClear(boolean val){
+    
+        if(Platform.isFxApplicationThread())
+            clearButton.setDisable(val);
+        
+        else
+            Platform.runLater(() -> clearButton.setDisable(val));
+    
+    }
+    
+    /**
      * Disables all relevant buttons
      */
     public void disableButtons(){
         
         disableStart(true);
         disableChoose(true);
+        disableClear(true);
         
     }
     
@@ -328,6 +347,7 @@ public class SNApp extends Application{
         
         disableStart(false);
         disableChoose(false);
+        disableClear(false);
         
     }
     

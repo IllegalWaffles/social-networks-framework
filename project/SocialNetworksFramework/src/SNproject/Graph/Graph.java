@@ -7,11 +7,10 @@ import SNproject.SNApp;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 
 /**
  *
@@ -89,13 +88,13 @@ public class Graph {
             @Override
             public Double call(){
             
-                ArrayList<Node> nodesAlreadyCalculated = new ArrayList();
+                HashMap<Integer, Node> nodesAlreadyCalculated = new HashMap();
                 int pathLength = 0;
-                int totalPathLength = 0;
+                long totalPathLength = 0;
 
-                int numNodes = nodemap.size();
+                final int numNodes = nodemap.size();
                 final int numPathsToCalculate = ((numNodes - 1) * (numNodes)) / 2;
-                int pathCalcCounter = 0;
+                long pathCalcCounter = 0;
 
                 //Iterate through every node as a start point
                 for(Node start : nodemap.values()){
@@ -105,7 +104,7 @@ public class Graph {
 
                         //If the destination node was already a starting node, skip
                         //If the two nodes are the same, skip
-                        if(nodesAlreadyCalculated.contains(end) || start.equals(end))
+                        if(nodesAlreadyCalculated.containsKey(end.getID()) || start.equals(end))
                             continue;
 
                         //Calculate the path length
@@ -121,13 +120,17 @@ public class Graph {
                         updateProgress(pathCalcCounter, numPathsToCalculate);
                         
                         if(pathCalcCounter % 10 == 0)
-                            updateMessage("Found " + pathCalcCounter + " paths out of " + numPathsToCalculate);
+                            updateMessage(String.format("Found %d paths out of %d (%d%%)", 
+                                    pathCalcCounter, 
+                                    numPathsToCalculate, 
+                                    (int)(((double)pathCalcCounter/(double)numPathsToCalculate)*100.0)
+                            ));
                         
                     }
 
                     //Since every path was already calculated for the start node,
                     //Ignore it for the rest of the paths
-                    nodesAlreadyCalculated.add(start);
+                    nodesAlreadyCalculated.put(start.getID(), start);
 
                 }
         
